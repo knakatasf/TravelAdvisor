@@ -6,10 +6,16 @@
 </head>
 
 <body>
+    #if ($errorMessage)
+    <p style="color:red;">$errorMessage</p>
+    #end
     <form action="/register" method="post">
         Username: <input type="text" name="username"><br>
         Password: <input type="password" name="password"><br>
-    <input type="submit" name="REGISTER">
+    <input type="submit" value="REGISTER">
+    </form>
+    <form action="/login" method="get">
+        <input type="submit" value="Go back to login page">
     </form>
 </body>
 </html>

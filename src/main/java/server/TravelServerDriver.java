@@ -1,5 +1,8 @@
 package server;
 
+import hotelapp.contoller.HotelReviewController;
+import server.TravelServer;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,7 +15,9 @@ public class TravelServerDriver {
 
     public static void main(String[] args) {
         // FILL IN CODE, and add more classes as needed
-        TravelServer server = new TravelServer();
+        HotelReviewController modelController = new HotelReviewController();
+        modelController.loadData(args);
+        TravelServer server = new TravelServer(modelController);
         server.start();
     }
 }

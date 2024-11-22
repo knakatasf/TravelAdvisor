@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel Advisor</title>
+</head>
+
+<body>
+<div class="jumbotron text-center">
+    <h1>Welcome to Travel Advisor!</h1>
+    #if ($username)
+    <h5>Hello, $username!</h5>
+    #end
+</div>
+
+<form action="/search" method="post">
+    Hotel ID: <input type="text" name="hotelId"><br>
+    Hotel Keyword: <input type="text" name="hotelKeyword"><br>
+    <input type="submit" value="SEARCH">
+</form>
+
+#if ($hotels)
+<h2>Search Results:</h2>
+#foreach ($hotel in $hotels)
+<p>$hotel</p>
+#end
+#end
+
+</body>
+</html>

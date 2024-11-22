@@ -1,4 +1,4 @@
-package model;
+package database;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,19 +8,19 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.Random;
 
-public class TravelDatabaseModel {
-    private static TravelDatabaseModel dbModel = new TravelDatabaseModel("database.properties");
+public class TravelDatabaseHandler {
+    private static TravelDatabaseHandler dbModel = new TravelDatabaseHandler("database.properties");
     private Properties config;
     private String uri = null;
     private Random random = new Random();
 
 
-    private TravelDatabaseModel(String propertiesFile) {
+    private TravelDatabaseHandler(String propertiesFile) {
         this.config = loadConfigFile(propertiesFile);
         this.uri = "jdbc:mysql://"+ config.getProperty("hostname") + "/" + config.getProperty("database") + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     }
 
-    public static TravelDatabaseModel getInstance() { return dbModel; }
+    public static TravelDatabaseHandler getInstance() { return dbModel; }
 
     public Properties loadConfigFile(String propertyFile) {
         Properties config = new Properties();
@@ -39,8 +39,8 @@ public class TravelDatabaseModel {
             System.out.println("dbConnection successful");
             statement = dbConnection.createStatement();
             statement.execute(PreparedStatements.CREATE_USER_TABLE_SQL);
-        } catch (SQLException ex) {
-            System.out.println(ex);
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
 
@@ -60,12 +60,12 @@ public class TravelDatabaseModel {
             md.update(salted.getBytes());
             hashed = encodeHex(md.digest(), 64);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Getting hash failed.");
         }
         return hashed;
     }
 
-    public void registerUser(String username, String password) {
+    public void registerUser(String username, String password) throws SQLException {
         byte[] saltBytes = new byte[16];
         random.nextBytes(saltBytes);
 
@@ -75,18 +75,14 @@ public class TravelDatabaseModel {
         PreparedStatement statement;
         try (Connection connection = DriverManager.getConnection(uri, config.getProperty("username"), config.getProperty("password"))) {
             System.out.println("dbConnection successful");
-            try {
-                statement = connection.prepareStatement(PreparedStatements.REGISTER_USER_SQL);
-                statement.setString(1, username);
-                statement.setString(2, passhash);
-                statement.setString(3, usersalt);
-                statement.executeUpdate();
-                statement.close();
-            } catch(SQLException e) {
-                System.out.println(e);
-            }
+            statement = connection.prepareStatement(PreparedStatements.REGISTER_USER_SQL);
+            statement.setString(1, username);
+            statement.setString(2, passhash);
+            statement.setString(3, usersalt);
+            statement.executeUpdate();
+            statement.close();
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new SQLException("Inserting the user failed: " + username);
         }
     }
 
@@ -100,11 +96,9 @@ public class TravelDatabaseModel {
             statement.setString(1, username);
             statement.setString(2, passhash);
             ResultSet results = statement.executeQuery();
-            boolean flag = results.next();
-            return flag;
-        }
-        catch (SQLException e) {
-            System.out.println(e);
+            return results.next();
+        } catch (SQLException e) {
+            System.out.println("Database connection failed.");
         }
         return false;
     }
@@ -119,7 +113,7 @@ public class TravelDatabaseModel {
                 return salt;
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("Getting salt failed.");
         }
         return salt;
     }

@@ -1,4 +1,4 @@
-package model;
+package database;
 
 public class PreparedStatements {
     public static final String CREATE_USER_TABLE_SQL = """
