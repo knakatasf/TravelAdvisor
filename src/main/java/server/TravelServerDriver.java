@@ -12,15 +12,7 @@ public class TravelServerDriver {
 
     public static void main(String[] args) {
         // FILL IN CODE, and add more classes as needed
-        Properties config = new Properties();
-        try (FileReader fr = new FileReader("database.properties")) {
-            config.load(fr);
-
-            String uri = "jdbc:mysql://" + config.getProperty("hostname") + "/" + config.getProperty("database") + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-            Connection dbConnection = DriverManager.getConnection(uri, config.getProperty("username"), config.getProperty("password"));
-            System.out.println("connected!");
-        } catch (IOException | SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        TravelServer server = new TravelServer();
+        server.start();
     }
 }
