@@ -8,19 +8,19 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.Random;
 
-public class TravelDatabaseHandler {
-    private static TravelDatabaseHandler dbModel = new TravelDatabaseHandler("database.properties");
+public class TravelDatabaseManager {
+    private static TravelDatabaseManager dbModel = new TravelDatabaseManager("database.properties");
     private Properties config;
     private String uri = null;
     private Random random = new Random();
 
 
-    private TravelDatabaseHandler(String propertiesFile) {
+    private TravelDatabaseManager(String propertiesFile) {
         this.config = loadConfigFile(propertiesFile);
         this.uri = "jdbc:mysql://"+ config.getProperty("hostname") + "/" + config.getProperty("database") + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     }
 
-    public static TravelDatabaseHandler getInstance() { return dbModel; }
+    public static TravelDatabaseManager getInstance() { return dbModel; }
 
     public Properties loadConfigFile(String propertyFile) {
         Properties config = new Properties();

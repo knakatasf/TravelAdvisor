@@ -1,6 +1,7 @@
 package server.servlet;
 
 import hotelapp.contoller.HotelReviewController;
+import hotelapp.model.entity.Hotel;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SearchHotelServlet extends HttpServlet {
     private HotelReviewController modelController;
@@ -30,7 +32,6 @@ public class SearchHotelServlet extends HttpServlet {
             response.sendRedirect("/login");
             return;
         }
-
 
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -72,14 +73,30 @@ public class SearchHotelServlet extends HttpServlet {
             context.put("username", username);
 
         String hotelId = request.getParameter("hotelId");
-        List<String> hotels = new ArrayList<>();
-        String result = modelController.findHotel(hotelId);
-        hotels.add(result);
-        context.put("hotels", hotels);
+        String keyword = request.getParameter("keyword");
+
+        List<Hotel> hotelList = new ArrayList<>();
+        if (hotelId != null && !hotelId.isEmpty()) {
+            Optional<Hotel> maybeHotel = modelController.findHotelByValue(hotelId);
+            if (maybeHotel.isPresent()) {
+                System.out.println(maybeHotel.get());
+                hotelList.add(maybeHotel.get());
+            }
+        }
+
+        if (keyword != null && !keyword.isEmpty()) {
+            List<Hotel> maybeHotels = modelController.findHotelsByKeyword(keyword);
+            if (!maybeHotels.isEmpty()) {
+                hotelList.addAll(maybeHotels);
+            }
+        }
+
+        if (!hotelList.isEmpty()) {
+            context.put("hotelList", hotelList);
+        }
+
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
-        System.out.println(writer);
-
         out.println(writer);
     }
 }

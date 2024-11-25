@@ -4,7 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import database.TravelDatabaseHandler;
+import database.TravelDatabaseManager;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -53,9 +53,9 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         if (isValidUsername(username) && isValidPassword(password)) {
-            TravelDatabaseHandler dbHandler = TravelDatabaseHandler.getInstance();
+            TravelDatabaseManager dbManager = TravelDatabaseManager.getInstance();
             try {
-                dbHandler.registerUser(username, password);
+                dbManager.registerUser(username, password);
                 response.sendRedirect("/login");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());

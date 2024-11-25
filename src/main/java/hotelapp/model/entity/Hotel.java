@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
  * Entity class for a Hotel object.
  * Utilizes builder pattern to ensure all the data member is valid.
  */
-public class Hotel implements Comparable<Hotel> {
+public class Hotel implements Comparable<Hotel>, Cloneable {
     private String hotelId;
     private String hotelName;
     private String addr;
@@ -98,6 +98,7 @@ public class Hotel implements Comparable<Hotel> {
     public String getState() { return state; }
     public String getLat() { return lat; }
     public String getLng() { return lng; }
+    public String getAddress() { return addr + ", " + city + ", " + state; }
 
     /**
      * Serializes a Hotel object to Json Object.
@@ -129,5 +130,10 @@ public class Hotel implements Comparable<Hotel> {
         sb.append(getState() + System.lineSeparator());
         sb.append(getLat() + " - " + getLng());
         return sb.toString();
+    }
+
+    @Override
+    public Hotel clone() throws CloneNotSupportedException {
+        return (Hotel)super.clone();
     }
 }

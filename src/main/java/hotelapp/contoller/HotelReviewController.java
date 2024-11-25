@@ -7,6 +7,8 @@ import hotelapp.handler.ArgumentHandler;
 import hotelapp.model.DataModel;
 import hotelapp.model.HotelData;
 import hotelapp.model.ThreadSafeReviewData;
+import hotelapp.model.entity.Hotel;
+import hotelapp.model.entity.Review;
 import hotelapp.model.parser.HotelJsonParser;
 import hotelapp.model.parser.ReviewJsonParser;
 import hotelapp.traverser.JsonTraverser;
@@ -15,7 +17,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.SortedSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
@@ -172,6 +176,18 @@ public class HotelReviewController {
      */
     public Optional<JsonObject> findWordInJson(String word, int num) {
         return ((ThreadSafeReviewData)reviewData).findWordInJson(word, num);
+    }
+
+    public Optional<Hotel> findHotelByValue(String hotelId) {
+        return ((HotelData)hotelData).findHotelByValue(hotelId);
+    }
+
+    public List<Hotel> findHotelsByKeyword(String keyword) {
+        return ((HotelData)hotelData).findHotelsByKeyword(keyword);
+    }
+
+    public List<Review> findReviewsByValue(String hotelId) {
+        return ((ThreadSafeReviewData)reviewData).findReviewsByValue(hotelId);
     }
 
 }

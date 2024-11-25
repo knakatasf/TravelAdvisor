@@ -177,4 +177,17 @@ public class ReviewData implements DataModel<Review> {
         return Optional.empty();
     }
 
+    public List<Review> findReviewsByValue(String hotelId) {
+        List<Review> reviewList = new ArrayList<>();
+        try {
+            if (reviewMap.containsKey(hotelId)) {
+                for (Review review : reviewMap.get(hotelId)) {
+                    reviewList.add(review.clone());
+                }
+            }
+            return reviewList;
+        } catch (CloneNotSupportedException e) {
+            return reviewList;
+        }
+    }
 }

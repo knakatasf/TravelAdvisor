@@ -93,4 +93,33 @@ public class HotelData implements DataModel<Hotel>, Iterable<Hotel> {
     public Iterator<Hotel> iterator() {
         return hotelMap.values().iterator();
     }
+
+    public Optional<Hotel> findHotelByValue(String hotelId) {
+        try {
+            if (hotelMap.containsKey(hotelId)) {
+                System.out.println("Returning..");
+                Hotel cloned = hotelMap.get(hotelId).clone();
+                return Optional.of(cloned);
+            }
+            return Optional.empty();
+        } catch (CloneNotSupportedException e) {
+            System.out.println("error");
+            return Optional.empty();
+        }
+    }
+
+    public List<Hotel> findHotelsByKeyword(String keyword) {
+        List<Hotel> hotelList = new ArrayList<>();
+        try {
+            for (Hotel hotel : hotelMap.values()) {
+                if (hotel.getHotelName().contains(keyword)) {
+                    Hotel cloned = hotel.clone();
+                    hotelList.add(cloned);
+                }
+            }
+            return hotelList;
+        } catch (CloneNotSupportedException e) {
+            return hotelList;
+        }
+    }
 }

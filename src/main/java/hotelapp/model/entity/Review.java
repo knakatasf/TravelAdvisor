@@ -6,13 +6,14 @@ import com.google.gson.JsonObject;
  * Entity class for a Hotel object.
  * Utilizes builder pattern to ensure all the data member is valid.
  */
-public class Review implements Comparable<Review> {
+public class Review implements Comparable<Review>, Cloneable {
     private String hotelId;
     private String reviewId;
     private String title;
     private String reviewText;
     private String userNickname;
     private String submissionDate;
+    private double overallRating;
 
     public Review(ReviewBuilder builder) {
         this.hotelId = builder.hotelId;
@@ -21,6 +22,7 @@ public class Review implements Comparable<Review> {
         this.reviewText = builder.reviewText;
         this.userNickname = builder.userNickname;
         this.submissionDate = builder.submissionDate;
+        this.overallRating = builder.overallRating;
     }
 
     public static class ReviewBuilder {
@@ -30,6 +32,7 @@ public class Review implements Comparable<Review> {
         private String reviewText;
         private String userNickname;
         private String submissionDate;
+        private double overallRating;
 
         public ReviewBuilder hotelId(String hotelId) {
             this.hotelId = hotelId;
@@ -61,6 +64,17 @@ public class Review implements Comparable<Review> {
             return this;
         }
 
+        public ReviewBuilder overallRating(String overallRatingInString) {
+            try {
+                overallRating = Double.parseDouble(overallRatingInString);
+                overallRating = Math.round(overallRating * 10) / 10.0;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid floating point detected: " + overallRatingInString);
+                overallRating = 4.0;
+            }
+            return this;
+        }
+
         /**
          * Builds a Review object using builder patter; Ensures all the data members are valid.
          * @return Review object
@@ -71,9 +85,10 @@ public class Review implements Comparable<Review> {
         }
 
         private void validate() {
-            if (userNickname.isEmpty() || userNickname.equals("")) {
+            if (userNickname.isEmpty() || userNickname.equals(""))
                 userNickname = "Anonymous";
-            }
+            if (title.isEmpty() || title.equals(""))
+                title = "No title";
         }
     }
 
@@ -83,6 +98,7 @@ public class Review implements Comparable<Review> {
     public String getReviewText() { return reviewText; }
     public String getUserNickname() { return userNickname; }
     public String getSubmissionDate() { return submissionDate; }
+    public double getOverallRating() { return overallRating; }
 
     /**
      * Serializes a Review object to a Json Object.
@@ -114,5 +130,10 @@ public class Review implements Comparable<Review> {
         if (comp == 0)
             return this.getReviewId().compareTo(other.getReviewId());
         return -comp;
+    }
+
+    @Override
+    public Review clone() throws CloneNotSupportedException {
+        return (Review)super.clone();
     }
 }

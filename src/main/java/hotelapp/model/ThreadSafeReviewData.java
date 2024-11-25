@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -128,6 +129,16 @@ public class ThreadSafeReviewData extends ReviewData {
             return super.findWordInJson(word, num);
         } finally {
             lockForInvertedIndex.readLock().unlock();
+        }
+    }
+
+    @Override
+    public List<Review> findReviewsByValue(String hotelId) {
+        try {
+            lockForReviewMap.readLock().lock();
+            return super.findReviewsByValue(hotelId);
+        } finally {
+            lockForReviewMap.readLock().unlock();
         }
     }
 }

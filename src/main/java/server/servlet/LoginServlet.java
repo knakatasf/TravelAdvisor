@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import database.TravelDatabaseHandler;
+import database.TravelDatabaseManager;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -15,6 +15,7 @@ import java.io.StringWriter;
 
 public class LoginServlet extends HttpServlet {
     private final int SESSION_TIMEOUT = 600;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
@@ -50,8 +51,8 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        TravelDatabaseHandler dbHandler = TravelDatabaseHandler.getInstance();
-        if (dbHandler.authenticateUser(username, password)) {
+        TravelDatabaseManager dbManager = TravelDatabaseManager.getInstance();
+        if (dbManager.authenticateUser(username, password)) {
             System.out.println("Login success!");
             session.setAttribute("username", username);
             session.setAttribute("isLoggedIn ", Boolean.TRUE );
