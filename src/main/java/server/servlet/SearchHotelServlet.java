@@ -38,17 +38,16 @@ public class SearchHotelServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         VelocityEngine ve = (VelocityEngine) getServletContext().getAttribute("templateEngine");
-        Template template = ve.getTemplate("static/search.html");
+        Template template = ve.getTemplate("static/html/search.html");
         VelocityContext context = new VelocityContext();
 
         String username = (String)session.getAttribute("username");
         if (username != null)
             context.put("username", username);
 
-            try (StringWriter writer = new StringWriter()) {
-            template.merge(context, writer);
-            out.println(writer);
-        }
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+        out.println(writer);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class SearchHotelServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         VelocityEngine ve = (VelocityEngine) getServletContext().getAttribute("templateEngine");
-        Template template = ve.getTemplate("static/search.html");
+        Template template = ve.getTemplate("static/html/search.html");
         VelocityContext context = new VelocityContext();
 
         String username = (String)session.getAttribute("username");

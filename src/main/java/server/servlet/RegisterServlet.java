@@ -34,7 +34,7 @@ public class RegisterServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         VelocityEngine ve = (VelocityEngine) getServletContext().getAttribute("templateEngine");
-        Template template = ve.getTemplate("static/register.html");
+        Template template = ve.getTemplate("static/html/register.html");
         VelocityContext context = new VelocityContext();
 
         String errorMessage = request.getParameter("error");
@@ -80,7 +80,7 @@ public class RegisterServlet extends HttpServlet {
         if (password.length() < CONST.PASSWORD_MIN_LENGTH)
             return false;
 
-        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[A-Za-z])(?=.*[@#$%])");
+        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[A-Za-z])(?=.*[!@#$%^&*?])");
         Matcher matcher = pattern.matcher(password);
         return matcher.find();
     }

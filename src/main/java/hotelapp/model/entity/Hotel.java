@@ -99,6 +99,11 @@ public class Hotel implements Comparable<Hotel>, Cloneable {
     public String getLat() { return lat; }
     public String getLng() { return lng; }
     public String getAddress() { return addr + ", " + city + ", " + state; }
+    public String getExpediaLink() {
+        String hotelNameForLink = hotelName.replace("/", " ").replace(" ", "-");
+        return String.format("https://www.expedia.com/%s-Hotels-%s.h%s.Hotel-Information",
+                getCity(), hotelNameForLink, getHotelId());
+    }
 
     /**
      * Serializes a Hotel object to Json Object.

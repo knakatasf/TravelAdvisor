@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Advisor - Login</title>
+    <title>Travel Advisor - Register</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('images/sf.jpg');
+            background-image: url('../images/yosemite.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -127,20 +127,20 @@
     #end
     <div class="login-header">
         <h1>Travel Advisor</h1>
-        <p>Welcome! Please log in to your account.</p>
+        <p>Create your new account.</p>
     </div>
-    <form action="/login" method="post">
+    <form action="/register" method="post">
         <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required placeholder="Enter your username">
+            <label for="usernameInput">Username</label>
+            <input type="text" id="usernameInput" name="username" required placeholder="Choose your username">
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required placeholder="Enter your password">
+            <input type="password" id="password" name="password" required placeholder="Choose your password">
         </div>
         <div class="button-group">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="/register" class="btn btn-secondary">Register</a>
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a href="/login" class="btn btn-secondary">Back to Login</a>
         </div>
     </form>
 </div>

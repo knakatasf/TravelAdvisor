@@ -190,4 +190,8 @@ public class HotelReviewController {
         return ((ThreadSafeReviewData)reviewData).findReviewsByValue(hotelId);
     }
 
+    public void addReview(Review review) {
+        reviewData.add(review);
+    }
+
 }

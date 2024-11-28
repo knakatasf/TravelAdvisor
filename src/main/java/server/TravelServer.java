@@ -8,10 +8,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import server.servlet.HotelInfoServlet;
-import server.servlet.LoginServlet;
-import server.servlet.RegisterServlet;
-import server.servlet.SearchHotelServlet;
+import server.servlet.*;
 
 public class TravelServer {
     private static final int PORT = 8080;
@@ -29,6 +26,7 @@ public class TravelServer {
         handler.addServlet(RegisterServlet.class, "/register");
         handler.addServlet(new ServletHolder(new SearchHotelServlet(modelController)), "/search");
         handler.addServlet(new ServletHolder(new HotelInfoServlet(modelController)), "/hotelinfo/*");
+        handler.addServlet(new ServletHolder(new SubmitReviewServlet(modelController)), "/submit-review/*");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);

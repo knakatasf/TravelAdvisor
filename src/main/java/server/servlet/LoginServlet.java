@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         VelocityEngine ve = (VelocityEngine) getServletContext().getAttribute("templateEngine");
-        Template template = ve.getTemplate("static/login.html");
+        Template template = ve.getTemplate("static/html/login.html");
         VelocityContext context = new VelocityContext();
 
         String errorMessage = request.getParameter("error");

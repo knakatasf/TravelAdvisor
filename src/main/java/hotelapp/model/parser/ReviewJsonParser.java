@@ -46,12 +46,13 @@ public class ReviewJsonParser implements JsonDataParser<Review> {
                 String reviewText = jsonObj.get("reviewText").getAsString();
                 String userNickname = jsonObj.get("userNickname").getAsString();
                 String submissionDate = jsonObj.get("reviewSubmissionDate").getAsString();
+                String overallRating = jsonObj.get("ratingOverall").getAsString();
 
                 Review.ReviewBuilder builder = new Review.ReviewBuilder();
                 reviews.add(builder.hotelId(hotelId).reviewId(reviewId)
                         .title(title).reviewText(reviewText)
                         .userNickname(userNickname).submissionDate(submissionDate)
-                        .build());
+                        .overallRating(overallRating).build());
             }
         } catch (FileNotFoundException e) {
             logger.error("File couldn't be found: " + p);
