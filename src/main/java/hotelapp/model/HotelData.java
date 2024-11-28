@@ -97,7 +97,6 @@ public class HotelData implements DataModel<Hotel>, Iterable<Hotel> {
     public Optional<Hotel> findHotelByValue(String hotelId) {
         try {
             if (hotelMap.containsKey(hotelId)) {
-                System.out.println("Returning..");
                 Hotel cloned = hotelMap.get(hotelId).clone();
                 return Optional.of(cloned);
             }
@@ -122,4 +121,20 @@ public class HotelData implements DataModel<Hotel>, Iterable<Hotel> {
             return hotelList;
         }
     }
+
+    public List<Hotel> loadAllHotelsByValue() {
+        List<Hotel> hotelList = new ArrayList<>();
+        try {
+            for (Hotel hotel : hotelMap.values()) {
+                Hotel cloned = hotel.clone();
+                hotelList.add(cloned);
+            }
+            return hotelList;
+        } catch (CloneNotSupportedException e) {
+            System.out.println(e);
+        }
+        return hotelList;
+
+    }
+
 }

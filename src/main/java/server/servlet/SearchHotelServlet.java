@@ -45,6 +45,9 @@ public class SearchHotelServlet extends HttpServlet {
         if (username != null)
             context.put("username", username);
 
+        List<Hotel> hotelList = modelController.loadAllHotelsByValue();
+        context.put("hotelList", hotelList);
+
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
         out.println(writer);
@@ -78,7 +81,6 @@ public class SearchHotelServlet extends HttpServlet {
         if (hotelId != null && !hotelId.isEmpty()) {
             Optional<Hotel> maybeHotel = modelController.findHotelByValue(hotelId);
             if (maybeHotel.isPresent()) {
-                System.out.println(maybeHotel.get());
                 hotelList.add(maybeHotel.get());
             }
         }

@@ -141,5 +141,25 @@ public class ThreadSafeReviewData extends ReviewData {
             lockForReviewMap.readLock().unlock();
         }
     }
+
+    @Override
+    public Optional<Review> findReviewByValue(String hotelId, String reviewId) {
+        try {
+            lockForReviewMap.readLock().lock();
+            return super.findReviewByValue(hotelId, reviewId);
+        } finally {
+            lockForReviewMap.readLock().unlock();
+        }
+    }
+
+    @Override
+    public void removeReview(String hotelId, String reviewId) {
+        try {
+            lockForReviewMap.readLock().lock();
+            super.removeReview(hotelId, reviewId);
+        } finally {
+            lockForReviewMap.readLock().unlock();
+        }
+    }
 }
 

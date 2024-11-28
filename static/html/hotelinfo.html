@@ -140,6 +140,39 @@
             background-color: #2980b9;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .edit-review-button,
+        .delete-review-button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        .edit-review-button {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .edit-review-button:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-review-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .delete-review-button:hover {
+            background-color: #c0392b;
+        }
     </style>
 </head>
 
@@ -160,7 +193,7 @@
     </div>
 
     <div class="add-review-button-container">
-        <form action="/hotelinfo" method="post">
+        <form action="/hotelinfo/$hotel.getHotelId()/add-review" method="post">
             <input type="hidden" name="operationType" value="add">
             <button type="submit" class="add-review-button">Add Review</button>
         </form>
@@ -177,6 +210,20 @@
                 <span><strong>Date:</strong> $review.getSubmissionDate()</span>
             </div>
             <div class="review-text">$review.getReviewText()</div>
+            #if ($review.getUserNickname().equals($username))
+            <div class="button-container">
+                <form action="/hotelinfo/$hotel.getHotelId()/edit-review" method="post">
+                    <input type="hidden" name="reviewId" value=$review.getReviewId()>
+                    <input type="hidden" name="operationType" value="edit">
+                    <button type="submit" class="edit-review-button">Edit</button>
+                </form>
+                <form action="/hotelinfo/$hotel.getHotelId()/delete-review" method="post">
+                    <input type="hidden" name="reviewId" value=$review.getReviewId()>
+                    <input type="hidden" name="operationType" value="delete">
+                    <button type="submit" class="delete-review-button">Delete</button>
+                </form>
+            </div>
+            #end
         </div>
         #end
         #else

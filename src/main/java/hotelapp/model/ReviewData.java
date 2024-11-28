@@ -192,4 +192,33 @@ public class ReviewData implements DataModel<Review> {
             return reviewList;
         }
     }
+
+    public Optional<Review> findReviewByValue(String hotelId, String reviewId) {
+        if (reviewMap.containsKey(hotelId)) {
+            try {
+                for (Review review : reviewMap.get(hotelId)) {
+                    if (review.getReviewId().equals(reviewId)) {
+                        Review cloned = review.clone();
+                        return Optional.of(cloned);
+                    }
+                }
+            } catch (CloneNotSupportedException e) {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
+    }
+
+    public void removeReview(String hotelId, String reviewId) {
+        if (reviewMap.containsKey(hotelId)) {
+            Iterator<Review> it = reviewMap.get(hotelId).iterator();
+            while (it.hasNext()) {
+                Review review = it.next();
+                if (review.getReviewId().equals(reviewId)) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
+    }
 }

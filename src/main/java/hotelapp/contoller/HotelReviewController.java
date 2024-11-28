@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -192,6 +193,18 @@ public class HotelReviewController {
 
     public void addReview(Review review) {
         reviewData.add(review);
+    }
+
+    public List<Hotel> loadAllHotelsByValue() {
+        return ((HotelData)hotelData).loadAllHotelsByValue();
+    }
+
+    public Optional<Review> findReviewByValue(String hotelId, String reviewId) {
+        return ((ThreadSafeReviewData)reviewData).findReviewByValue(hotelId, reviewId);
+    }
+
+    public void removeReview(String hotelId, String reviewId) {
+        ((ThreadSafeReviewData)reviewData).removeReview(hotelId, reviewId);
     }
 
 }

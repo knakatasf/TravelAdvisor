@@ -26,7 +26,7 @@ public class TravelServer {
         handler.addServlet(RegisterServlet.class, "/register");
         handler.addServlet(new ServletHolder(new SearchHotelServlet(modelController)), "/search");
         handler.addServlet(new ServletHolder(new HotelInfoServlet(modelController)), "/hotelinfo/*");
-        handler.addServlet(new ServletHolder(new SubmitReviewServlet(modelController)), "/submit-review/*");
+        handler.addServlet(new ServletHolder(new ManageReviewServlet(modelController)), "/manage-review/*");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);

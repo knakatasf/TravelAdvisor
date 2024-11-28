@@ -41,7 +41,7 @@ public class HotelInfoServlet extends HttpServlet {
         Template template = ve.getTemplate("static/html/hotelinfo.html");
         VelocityContext context = new VelocityContext();
 
-        String username = (String)session.getAttribute("username");
+        String username = (String) session.getAttribute("username");
         if (username != null)
             context.put("username", username);
 
@@ -77,8 +77,16 @@ public class HotelInfoServlet extends HttpServlet {
         getBackToLogin(session, request, response);
 
         String operationType = request.getParameter("operationType");
-        if (operationType != null && operationType.equals("add")) {
-            addReview(session, request, response);
+        switch (operationType) {
+            case "add":
+                addReview(session, request, response);
+                break;
+            case "edit":
+                editReview(session, request, response);
+                break;
+            case "delete":
+                deleteReview(session, request, response);
+                break;
         }
     }
 
@@ -106,14 +114,16 @@ public class HotelInfoServlet extends HttpServlet {
         Template template = ve.getTemplate("static/html/addreview.html");
         VelocityContext context = new VelocityContext();
 
-        String username = (String)session.getAttribute("username");
+        String username = (String) session.getAttribute("username");
         if (username != null)
             context.put("username", username);
 
-        String hotelId = (String)session.getAttribute("hotelId");
+        String hotelId = (String) session.getAttribute("hotelId");
         if (hotelId != null) {
-            String hotelName = modelController.findHotelName(hotelId);
-            context.put("hotelName", hotelName);
+            Optional<Hotel> maybeHotel = modelController.findHotelByValue(hotelId);
+            if (maybeHotel.isPresent()) {
+                context.put("hotel", maybeHotel.get());
+            }
         }
 
         StringWriter writer = new StringWriter();
@@ -121,4 +131,44 @@ public class HotelInfoServlet extends HttpServlet {
         out.println(writer);
     }
 
+    private void editReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
+        response.setStatus(HttpServletResponse.SC_OK);
+        PrintWriter out = response.getWriter();
+
+        VelocityEngine ve = (VelocityEngine) getServletContext().getAttribute("templateEngine");
+        Template template = ve.getTemplate("static/html/editreview.html");
+        VelocityContext context = new VelocityContext();
+
+        String username = (String) session.getAttribute("username");
+        if (username != null)
+            context.put("username", username);
+
+        String hotelId = (String) session.getAttribute("hotelId");
+        if (hotelId != null) {
+            Optional<Hotel> maybeHotel = modelController.findHotelByValue(hotelId);
+            if (maybeHotel.isPresent()) {
+                context.put("hotel", maybeHotel.get());
+            }
+        }
+
+        String reviewId = request.getParameter("reviewId");
+
+        Optional<Review> maybeReview = modelController.findReviewByValue(hotelId, reviewId);
+        if (maybeReview.isPresent()) {
+            context.put("review", maybeReview.get());
+        }
+
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+        out.println(writer);
+    }
+
+    private void deleteReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String hotelId = (String) session.getAttribute("hotelId");
+        String reviewId = request.getParameter("reviewId");
+
+        modelController.removeReview(hotelId, reviewId);
+        response.sendRedirect("/hotelinfo/" + hotelId);
+    }
 }
