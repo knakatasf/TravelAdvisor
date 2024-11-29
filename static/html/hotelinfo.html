@@ -177,10 +177,11 @@
 </head>
 
 <body>
-
 <div class="header">
     <span class="welcome-message">Welcome, <strong>$username</strong>!</span>
-    <button class="logout-button" onclick="logout()">Logout</button>
+    <form action="/logout" method="get">
+        <button class="logout-button" type="submit">Logout</button>
+    </form>
 </div>
 
 <div class="hotel-details-container">

@@ -24,6 +24,7 @@ public class TravelServer {
         ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         handler.addServlet(LoginServlet.class, "/login");
         handler.addServlet(RegisterServlet.class, "/register");
+        handler.addServlet(LogoutServlet.class, "/logout");
         handler.addServlet(new ServletHolder(new SearchHotelServlet(modelController)), "/search");
         handler.addServlet(new ServletHolder(new HotelInfoServlet(modelController)), "/hotelinfo/*");
         handler.addServlet(new ServletHolder(new ManageReviewServlet(modelController)), "/manage-review/*");
