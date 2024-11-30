@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import database.TravelDatabaseManager;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -18,14 +19,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static server.CONST.ERROR_MAP;
+
 
 public class RegisterServlet extends HttpServlet {
-    private static final Map<String, String> ERROR_MAP = Map.of(
-            "connectionError" ,"Database connection failed..",
-            "usernameInvalid", "Username is invalid..",
-            "passwordInvalid", "Password is invalid..",
-            "usernameAndPasswordInvalid", "Username and password are invalid.."
-    );
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,9 +34,9 @@ public class RegisterServlet extends HttpServlet {
         Template template = ve.getTemplate("static/html/register.html");
         VelocityContext context = new VelocityContext();
 
-        String errorMessage = request.getParameter("error");
-        if (errorMessage != null)
-            context.put("errorMessage", errorMessage);
+        String errorCode = request.getParameter("error");
+        if (errorCode != null)
+            context.put("errorMessage", ERROR_MAP.get(errorCode));
 
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
@@ -50,7 +47,9 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
+        username = StringEscapeUtils.escapeHtml(username);
         String password = request.getParameter("password");
+        password = StringEscapeUtils.escapeHtml(password);
 
         if (isValidUsername(username) && isValidPassword(password)) {
             TravelDatabaseManager dbManager = TravelDatabaseManager.getInstance();
@@ -59,11 +58,14 @@ public class RegisterServlet extends HttpServlet {
                 response.sendRedirect("/login");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
-                response.sendRedirect("/register?error=connection");
+                response.sendRedirect("/register?error=conn");
             }
+        } else if (isValidUsername(username)) {
+            response.sendRedirect("/register?error=pass");
+        } else if (isValidPassword(password)) {
+            response.sendRedirect("/register?error=user");
         } else {
-            System.out.println("Username or password is invalid.");
-            response.sendRedirect("/register?error=invalid");
+            response.sendRedirect("/register?error=userAndPass");
         }
     }
 

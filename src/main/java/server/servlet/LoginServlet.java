@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import static server.CONST.ERROR_MAP;
+
 public class LoginServlet extends HttpServlet {
     private final int SESSION_TIMEOUT = 600;
 
@@ -33,9 +35,9 @@ public class LoginServlet extends HttpServlet {
         Template template = ve.getTemplate("static/html/login.html");
         VelocityContext context = new VelocityContext();
 
-        String errorMessage = request.getParameter("error");
-        if (errorMessage != null)
-            context.put("errorMessage", errorMessage);
+        String errorCode = request.getParameter("error");
+        if (errorCode != null)
+            context.put("errorMessage", ERROR_MAP.get(errorCode));
 
         try (StringWriter writer = new StringWriter()) {
             template.merge(context, writer);
@@ -59,7 +61,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("/search");
         } else {
             System.out.println("Login failed..");
-            response.sendRedirect("/login?error=invalid");
+            response.sendRedirect("/login?error=userOrPass");
         }
     }
 }
