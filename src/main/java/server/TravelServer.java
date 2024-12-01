@@ -22,6 +22,8 @@ public class TravelServer {
 
     public void start() {
         ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+
+        handler.addServlet(HomepageServlet.class, "/");
         handler.addServlet(LoginServlet.class, "/login");
         handler.addServlet(RegisterServlet.class, "/register");
         handler.addServlet(LogoutServlet.class, "/logout");

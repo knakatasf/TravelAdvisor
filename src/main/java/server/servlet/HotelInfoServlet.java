@@ -54,6 +54,7 @@ public class HotelInfoServlet extends HttpServlet {
         }
 
         Hotel hotel = null;
+        double averageRating = 0.0;
         Optional<Hotel> maybeHotel = modelController.findHotelByValue(hotelId);
         if (maybeHotel.isPresent()) {
             hotel = maybeHotel.get();
@@ -62,9 +63,10 @@ public class HotelInfoServlet extends HttpServlet {
 
             List<Review> reviewList = modelController.findReviewsByValue(hotelId);
             if (reviewList != null && !reviewList.isEmpty()) {
-                context.put("averageRating", getAverageRate(reviewList));
+                averageRating = getAverageRate(reviewList);
                 context.put("reviews", reviewList);
             }
+            context.put("averageRating", averageRating);
         }
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
@@ -87,6 +89,9 @@ public class HotelInfoServlet extends HttpServlet {
             case "delete":
                 deleteReview(session, request, response);
                 break;
+            default:
+                String hotelId = (String)session.getAttribute("hotelId");
+                response.sendRedirect("/hotelinfo/" + hotelId);
         }
     }
 
