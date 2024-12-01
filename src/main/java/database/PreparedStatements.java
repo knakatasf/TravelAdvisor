@@ -14,6 +14,9 @@ public class PreparedStatements {
             VALUES (?, ?, ?);
             """;
 
+    public static final String CHECK_DUPLICATES_SQL =
+            "SELECT * FROM users WHERE username = ?";
+
     public static final String SALT_SQL =
             "SELECT usersalt FROM users WHERE username = ?";
 

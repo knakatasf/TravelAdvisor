@@ -18,6 +18,12 @@ import static server.CONST.ERROR_MAP;
 public class LoginServlet extends HttpServlet {
     private final int SESSION_TIMEOUT = 600;
 
+    /**
+     * Displays login format and sends the user input to doPost() method.
+     * @param request might contain error parameter.
+     * @param response to be redirected to "/search" for the user.
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
@@ -45,6 +51,12 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Authorizes the user login by integrating with database.
+     * @param request contains HttpSession, username and password.
+     * @param response to be redirected for the user.
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();

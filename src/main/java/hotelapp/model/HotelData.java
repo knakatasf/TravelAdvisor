@@ -94,6 +94,11 @@ public class HotelData implements DataModel<Hotel>, Iterable<Hotel> {
         return hotelMap.values().iterator();
     }
 
+    /**
+     * Returns an Optional of a cloned Hotel object by hotelId.
+     * @param hotelId to be searched
+     * @return Optional of the cloned Hotel object.
+     */
     public Optional<Hotel> findHotelByValue(String hotelId) {
         try {
             if (hotelMap.containsKey(hotelId)) {
@@ -107,6 +112,11 @@ public class HotelData implements DataModel<Hotel>, Iterable<Hotel> {
         }
     }
 
+    /**
+     * Return a list of hotels contains the keyword in its names by value.
+     * @param keyword to be searched.
+     * @return List of the cloned hotel objects.
+     */
     public List<Hotel> findHotelsByKeyword(String keyword) {
         List<Hotel> hotelList = new ArrayList<>();
         try {
@@ -122,6 +132,10 @@ public class HotelData implements DataModel<Hotel>, Iterable<Hotel> {
         }
     }
 
+    /**
+     * Returns a list of all the hotels in the map, which are cloned.
+     * @return a list of all the cloned hotel object.
+     */
     public List<Hotel> loadAllHotelsByValue() {
         List<Hotel> hotelList = new ArrayList<>();
         try {

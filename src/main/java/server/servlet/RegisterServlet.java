@@ -1,6 +1,5 @@
 package server.servlet;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,17 +14,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static server.CONST.ERROR_MAP;
 
-
 public class RegisterServlet extends HttpServlet {
-
+    /**
+     * Displays a register format and sends the user inputs to doPost() method.
+     * @param request sent by a user
+     * @param response to be sent to the user
+     * @throws IOException
+     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
         PrintWriter out = response.getWriter();
@@ -44,15 +46,33 @@ public class RegisterServlet extends HttpServlet {
         out.println(writer);
     }
 
+    /**
+     * Takes the user inputs (username and password) and inserts the new user into the database.
+     * @param request contains username and password as parameters
+     * @param response to be redirected to /login or /register again
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        TravelDatabaseManager dbManager = TravelDatabaseManager.getInstance();
+
         String username = request.getParameter("username");
         username = StringEscapeUtils.escapeHtml(username);
+
+        try {
+            if (dbManager.isDuplicatedUsername(username)) {
+                response.sendRedirect("/register?error=userTaken");
+                return;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            response.sendRedirect("/register?error=conn");
+        }
+
         String password = request.getParameter("password");
         password = StringEscapeUtils.escapeHtml(password);
 
         if (isValidUsername(username) && isValidPassword(password)) {
-            TravelDatabaseManager dbManager = TravelDatabaseManager.getInstance();
             try {
                 dbManager.registerUser(username, password);
                 response.sendRedirect("/login");
@@ -69,6 +89,11 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Checks the username is valid.
+     * @param username passed by the user
+     * @return true if the username is valid, false otherwise.
+     */
     private boolean isValidUsername(String username) {
         if (username.length() < CONST.USERNAME_MIN_LENGTH)
             return false;
@@ -78,6 +103,11 @@ public class RegisterServlet extends HttpServlet {
         return matcher.find();
     }
 
+    /**
+     * Checks the password is valid.
+     * @param password passed by the user
+     * @return true if the password is valid, false otherwise.
+     */
     private boolean isValidPassword(String password) {
         if (password.length() < CONST.PASSWORD_MIN_LENGTH)
             return false;

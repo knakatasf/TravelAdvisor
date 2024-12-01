@@ -24,6 +24,13 @@ public class HotelInfoServlet extends HttpServlet {
         this.modelController = modelController;
     }
 
+    /**
+     * Displays Hotel information along with the list of its reviews.
+     * When the user clicks "Add Review", "Edit" or "Delete" button, be sent to doPost() method.
+     * @param request contains Hotel ID to display its information including reviews.
+     * @param response to be displayed for the user.
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
@@ -73,6 +80,15 @@ public class HotelInfoServlet extends HttpServlet {
         out.println(writer);
     }
 
+    /**
+     * When the user clicks "Add Review", "Edit" or "Delete" button, invokes respective method to deal with the user action.
+     * "Add Review": addReview() will be invoked and displays add review format.
+     * "Edit": editReview() will be invoked and displays edit review format.
+     * "Delete": deleteReview() will be invoked.
+     * @param request contains what action the user want to take.
+     * @param response to be redirected to appropriate service.
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
@@ -95,6 +111,13 @@ public class HotelInfoServlet extends HttpServlet {
         }
     }
 
+    /**
+     * If the user is not logged in, be redirected to /login
+     * @param session contains user login information.
+     * @param request
+     * @param response to be redirected to /login
+     * @throws IOException
+     */
     private void getBackToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (session == null || Boolean.FALSE.equals(session.getAttribute("isLoggedIn"))) {
             System.out.println("Please login first.");
@@ -102,6 +125,11 @@ public class HotelInfoServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Calculates and returns average satisfactory rate for a hotel.
+     * @param reviewList to be calculated the rate.
+     * @return average satisfactory rate.
+     */
     private double getAverageRate(List<Review> reviewList) {
         double total = 0.0;
         for (Review review : reviewList) {
@@ -110,6 +138,14 @@ public class HotelInfoServlet extends HttpServlet {
         return Math.round((total / reviewList.size()) * 10) / 10.0;
     }
 
+    /**
+     * When the user clicks "Add Review" button, this method is invoked through doPost method.
+     * Displays add review format, and sends user input to ManageReviewServlet.
+     * @param session contains username.
+     * @param request
+     * @param response to be displayed for the user.
+     * @throws IOException
+     */
     private void addReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -136,6 +172,14 @@ public class HotelInfoServlet extends HttpServlet {
         out.println(writer);
     }
 
+    /**
+     * When the user clicks "Edit Review" button, this method is invoked through doPost method.
+     * Displays edit review format, and sends user input to ManageReviewServlet.
+     * @param session contains username.
+     * @param request
+     * @param response to be displayed for the user.
+     * @throws IOException
+     */
     private void editReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -169,6 +213,13 @@ public class HotelInfoServlet extends HttpServlet {
         out.println(writer);
     }
 
+    /**
+     * When the user clicks "Delete Review" button, this method is invoked through doPost method. Deletes the review.
+     * @param session contains username.
+     * @param request
+     * @param response to be redirected for the user.
+     * @throws IOException
+     */
     private void deleteReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String hotelId = (String) session.getAttribute("hotelId");
         String reviewId = request.getParameter("reviewId");

@@ -31,18 +31,11 @@ public class TravelServer {
         handler.addServlet(new ServletHolder(new HotelInfoServlet(modelController)), "/hotelinfo/*");
         handler.addServlet(new ServletHolder(new ManageReviewServlet(modelController)), "/manage-review/*");
 
-        ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(true);
-        resourceHandler.setResourceBase("static");
-
-        HandlerList handlerList = new HandlerList();
-        handlerList.setHandlers(new Handler[] { handler, resourceHandler });
-
         VelocityEngine velocity = new VelocityEngine();
         velocity.init();
         handler.setAttribute("templateEngine", velocity);
 
-        travelServer.setHandler(handlerList);
+        travelServer.setHandler(handler);
 
         try {
             travelServer.start();

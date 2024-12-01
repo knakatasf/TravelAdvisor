@@ -128,10 +128,15 @@ public class Review implements Comparable<Review>, Cloneable {
     public int compareTo(Review other) {
         int comp = this.getSubmissionDate().compareTo(other.getSubmissionDate());
         if (comp == 0)
-            return this.getReviewId().compareTo(other.getReviewId());
+            return -(this.getReviewId().compareTo(other.getReviewId()));
         return -comp;
     }
 
+    /**
+     * Returns a deep copy of the review object
+     * @return deep copy of the review object
+     * @throws CloneNotSupportedException
+     */
     @Override
     public Review clone() throws CloneNotSupportedException {
         return (Review)super.clone();

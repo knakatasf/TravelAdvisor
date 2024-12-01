@@ -21,6 +21,12 @@ public class ManageReviewServlet extends HttpServlet {
         this.modelController = modelController;
     }
 
+    /**
+     * Takes care of the user's accidental access to "/manage-review"
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
@@ -33,6 +39,14 @@ public class ManageReviewServlet extends HttpServlet {
         response.sendRedirect("/hotelinfo" + hotelId);
     }
 
+    /**
+     * Takes care of user's action (operationType). If operationType is
+     * "add": invokes addReview method and add the review.
+     * "edit": invokes editReview method and edit the review.
+     * @param request contains operationType that the user want to do
+     * @param response to be redirected for the user
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
@@ -52,6 +66,13 @@ public class ManageReviewServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Adds a new review by creating a new Review object
+     * @param session contains hotelId and username.
+     * @param request contains a title, reviewText, and rating.
+     * @param response to be redirected for the user.
+     * @throws IOException
+     */
     private void addReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String hotelId = (String) session.getAttribute("hotelId");
         String userNickname = (String) session.getAttribute("username");
@@ -76,6 +97,13 @@ public class ManageReviewServlet extends HttpServlet {
         response.sendRedirect("/hotelinfo/" + hotelId);
     }
 
+    /**
+     * Edit the review by actually removing the review and adding a new review.
+     * @param session contains hotelId.
+     * @param request contains reviewId, reviewTitle, rating, and reviewText.
+     * @param response to be redirected for the user.
+     * @throws IOException
+     */
     private void editReview(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String hotelId = (String) session.getAttribute("hotelId");
         String reviewId = request.getParameter("reviewId");

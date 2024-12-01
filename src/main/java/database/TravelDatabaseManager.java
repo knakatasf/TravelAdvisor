@@ -20,9 +20,18 @@ public class TravelDatabaseManager {
         this.uri = "jdbc:mysql://"+ config.getProperty("hostname") + "/" + config.getProperty("database") + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     }
 
+    /**
+     * Singleton pattern
+     * @return static object of databaseManager.
+     */
     public static TravelDatabaseManager getInstance() { return dbModel; }
 
-    public Properties loadConfigFile(String propertyFile) {
+    /**
+     * Loads configuration contained in the propertyFile.
+     * @param propertyFile contains database username and password
+     * @return Properties that contains username and password for the database.
+     */
+    private Properties loadConfigFile(String propertyFile) {
         Properties config = new Properties();
         try (FileReader fr = new FileReader(propertyFile)) {
             config.load(fr);
@@ -33,6 +42,9 @@ public class TravelDatabaseManager {
         return config;
     }
 
+    /**
+     * Creates tables for the database.
+     */
     public void createTable() {
         Statement statement;
         try (Connection dbConnection = DriverManager.getConnection(uri, config.getProperty("username"), config.getProperty("password"))) {
@@ -44,6 +56,12 @@ public class TravelDatabaseManager {
         }
     }
 
+    /**
+     * Create usersalt which is unique for the user.
+     * @param bytes random number
+     * @param length length
+     * @return usersalt for the user
+     */
     public static String encodeHex(byte[] bytes, int length) {
         BigInteger bigint = new BigInteger(1, bytes);
         String hex = String.format("%0" + length + "X", bigint);
@@ -52,6 +70,12 @@ public class TravelDatabaseManager {
         return hex;
     }
 
+    /**
+     * Using usersalt which is unique for the user, creates hashed password for the user
+     * @param password to be hashed
+     * @param salt to be used to hash the password
+     * @return hashed password
+     */
     public static String getHash(String password, String salt) {
         String salted = salt + password;
         String hashed = salted;
@@ -65,6 +89,34 @@ public class TravelDatabaseManager {
         return hashed;
     }
 
+    /**
+     * Checks if the username is already taken or not.
+     * @param username to be checked
+     * @return true if the username is already take, false otherwise.
+     * @throws SQLException
+     */
+    public boolean isDuplicatedUsername(String username) throws SQLException {
+        PreparedStatement statement = null;
+        try (Connection connection = DriverManager.getConnection(uri, config.getProperty("username"), config.getProperty("password"))) {
+            System.out.println("dbConnection successful");
+            statement = connection.prepareStatement(PreparedStatements.CHECK_DUPLICATES_SQL);
+            statement.setString(1, username);
+
+            ResultSet results = statement.executeQuery();
+            if (results.next())
+                return true;
+            return false;
+        } catch (SQLException e) {
+            throw new SQLException("Database connection failed.");
+        }
+    }
+
+    /**
+     * Creates usersalt which is unique to the user, and hashes the password using usersalt. Insert all of them to database.
+     * @param username of the user
+     * @param password to be hashed using usersalt
+     * @throws SQLException
+     */
     public void registerUser(String username, String password) throws SQLException {
         byte[] saltBytes = new byte[16];
         random.nextBytes(saltBytes);
@@ -86,6 +138,12 @@ public class TravelDatabaseManager {
         }
     }
 
+    /**
+     * Takes username and get usersalt from the database. Hashes the password the user inputs and checks if they are identical.
+     * @param username to get usersalt and hashed password in the database.
+     * @param password to be hashed using usersalt
+     * @return true if valid, false otherwise.
+     */
     public boolean authenticateUser(String username, String password) {
         PreparedStatement statement;
         try (Connection connection = DriverManager.getConnection(uri, config.getProperty("username"), config.getProperty("password"))) {
@@ -103,6 +161,12 @@ public class TravelDatabaseManager {
         return false;
     }
 
+    /**
+     * Takes username and gets usersalt in the database.
+     * @param connection to be connected to the database
+     * @param user username
+     * @return usersalt in the database.
+     */
     private String getSalt(Connection connection, String user) {
         String salt = null;
         try (PreparedStatement statement = connection.prepareStatement(PreparedStatements.SALT_SQL)) {

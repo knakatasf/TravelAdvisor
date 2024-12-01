@@ -179,30 +179,64 @@ public class HotelReviewController {
         return ((ThreadSafeReviewData)reviewData).findWordInJson(word, num);
     }
 
+    /**
+     * Returns an Optional of a cloned Hotel object by hotelId.
+     * @param hotelId to be searched
+     * @return Optional of the cloned Hotel object.
+     */
     public Optional<Hotel> findHotelByValue(String hotelId) {
         return ((HotelData)hotelData).findHotelByValue(hotelId);
     }
 
+    /**
+     * Return a list of hotels contains the keyword in its names by value.
+     * @param keyword to be searched.
+     * @return List of the cloned hotel objects.
+     */
     public List<Hotel> findHotelsByKeyword(String keyword) {
         return ((HotelData)hotelData).findHotelsByKeyword(keyword);
     }
 
+    /**
+     * Returns a list of the cloned reviews of the hotel by hotelId.
+     * @param hotelId to be searched.
+     * @return a list of the cloned review objects of the hotel.
+     */
     public List<Review> findReviewsByValue(String hotelId) {
         return ((ThreadSafeReviewData)reviewData).findReviewsByValue(hotelId);
     }
 
+    /**
+     * Adds a review to the map.
+     * @param review to be added.
+     */
     public void addReview(Review review) {
         reviewData.add(review);
     }
 
+    /**
+     * Returns a list of all the hotels in the map, which are cloned.
+     * @return a list of all the cloned hotel object.
+     */
     public List<Hotel> loadAllHotelsByValue() {
         return ((HotelData)hotelData).loadAllHotelsByValue();
     }
 
+    /**
+     * Return an Optional of a cloned review object by hotelId and reviewId.
+     * @param hotelId to be searched.
+     * @param reviewId to be searched.
+     * @return Optional of the cloned review object.
+     */
     public Optional<Review> findReviewByValue(String hotelId, String reviewId) {
         return ((ThreadSafeReviewData)reviewData).findReviewByValue(hotelId, reviewId);
     }
 
+    /**
+     * Removes a review object from the map.
+     * @param hotelId to be searched.
+     * @param reviewId to be searched.
+     */
     public void removeReview(String hotelId, String reviewId) {
         ((ThreadSafeReviewData)reviewData).removeReview(hotelId, reviewId);
     }

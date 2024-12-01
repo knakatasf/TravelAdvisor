@@ -137,6 +137,11 @@ public class Hotel implements Comparable<Hotel>, Cloneable {
         return sb.toString();
     }
 
+    /**
+     * Returns a deep copy of the hotel object.
+     * @return Deep copy of the hotel object.
+     * @throws CloneNotSupportedException
+     */
     @Override
     public Hotel clone() throws CloneNotSupportedException {
         return (Hotel)super.clone();

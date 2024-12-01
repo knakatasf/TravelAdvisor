@@ -179,6 +179,11 @@ public class ReviewData implements DataModel<Review> {
         return Optional.empty();
     }
 
+    /**
+     * Returns a list of the cloned reviews of the hotel by hotelId.
+     * @param hotelId to be searched.
+     * @return a list of the cloned review objects of the hotel.
+     */
     public List<Review> findReviewsByValue(String hotelId) {
         List<Review> reviewList = new ArrayList<>();
         try {
@@ -193,6 +198,12 @@ public class ReviewData implements DataModel<Review> {
         }
     }
 
+    /**
+     * Return an Optional of a cloned review object by hotelId and reviewId.
+     * @param hotelId to be searched.
+     * @param reviewId to be searched.
+     * @return Optional of the cloned review object.
+     */
     public Optional<Review> findReviewByValue(String hotelId, String reviewId) {
         if (reviewMap.containsKey(hotelId)) {
             try {
@@ -209,6 +220,11 @@ public class ReviewData implements DataModel<Review> {
         return Optional.empty();
     }
 
+    /**
+     * Removes a review object from the map.
+     * @param hotelId to be searched.
+     * @param reviewId to be searched.
+     */
     public void removeReview(String hotelId, String reviewId) {
         if (reviewMap.containsKey(hotelId)) {
             Iterator<Review> it = reviewMap.get(hotelId).iterator();

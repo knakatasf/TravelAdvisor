@@ -9,6 +9,7 @@ public class CONST {
     final static public Map<String, String> ERROR_MAP = Map.of(
             "conn", "Database connection error",
             "user", "Invalid username",
+            "userTaken", "Username already exists",
             "pass", "Invalid password",
             "userAndPass", "Invalid username and password",
             "userOrPass", "Username and/or password is incorrect"

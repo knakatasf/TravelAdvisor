@@ -132,6 +132,11 @@ public class ThreadSafeReviewData extends ReviewData {
         }
     }
 
+    /**
+     * Returns a list of the cloned reviews of the hotel by hotelId.
+     * @param hotelId to be searched.
+     * @return a list of the cloned review objects of the hotel.
+     */
     @Override
     public List<Review> findReviewsByValue(String hotelId) {
         try {
@@ -142,6 +147,12 @@ public class ThreadSafeReviewData extends ReviewData {
         }
     }
 
+    /**
+     * Return an Optional of a cloned review object by hotelId and reviewId.
+     * @param hotelId to be searched.
+     * @param reviewId to be searched.
+     * @return Optional of the cloned review object.
+     */
     @Override
     public Optional<Review> findReviewByValue(String hotelId, String reviewId) {
         try {
@@ -152,6 +163,11 @@ public class ThreadSafeReviewData extends ReviewData {
         }
     }
 
+    /**
+     * Removes a review object from the map.
+     * @param hotelId to be searched.
+     * @param reviewId to be searched.
+     */
     @Override
     public void removeReview(String hotelId, String reviewId) {
         try {
